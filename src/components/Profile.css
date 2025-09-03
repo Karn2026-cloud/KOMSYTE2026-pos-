@@ -1,0 +1,286 @@
+/* --- Profile.css --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* --- Keyframes for Animations --- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* --- Main Dashboard Styles --- */
+.profile-container {
+  font-family: 'Poppins', sans-serif;
+  padding: 25px;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.title {
+  font-size: 2.2rem;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.logout-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+.logout-button:hover {
+  background: #c0392b;
+}
+
+/* --- Grid & Cards --- */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 6px 25px rgba(44, 62, 80, 0.08);
+}
+
+.card-title {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #34495e;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.item {
+  font-size: 1rem;
+  color: #555;
+  margin: 10px 0;
+}
+
+.item strong {
+  color: #34495e;
+}
+
+/* --- Buttons --- */
+.upgrade-button,
+.add-new-button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+.upgrade-button {
+  background: #3498db;
+  color: white;
+}
+
+.upgrade-button:hover {
+  background: #2980b9;
+}
+
+.add-new-button {
+  background: #2ecc71;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto; /* Override 100% width */
+  margin-top: 0;
+}
+
+.add-new-button:hover {
+  background: #27ae60;
+}
+
+/* --- Workers Table --- */
+.table-container {
+  overflow-x: auto;
+}
+
+.worker-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.th {
+  background: #f8f9fa;
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 2px solid #e9ecef;
+  color: #495057;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.td {
+  padding: 15px;
+  border-bottom: 1px solid #e9ecef;
+  vertical-align: middle;
+}
+
+.no-workers-message {
+  text-align: center;
+  color: #777;
+  padding: 30px;
+}
+
+/* --- Table Action Buttons --- */
+.action-button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1.2rem;
+  margin: 0 8px;
+  transition: transform 0.2s ease;
+}
+
+.action-button:hover {
+  transform: scale(1.2);
+}
+
+.performance-button {
+  color: #3498db;
+}
+
+.remove-button {
+  color: #e74c3c;
+}
+
+/* --- Add Worker Modal --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.4s ease;
+}
+
+.modal-title {
+  margin-top: 0;
+  color: #34495e;
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 12px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.modal-input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.modal-close-button,
+.modal-add-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+  font-weight: 500;
+  transition: background 0.2s ease;
+}
+
+.modal-close-button {
+  background: #95a5a6;
+}
+
+.modal-close-button:hover {
+  background: #7f8c8d;
+}
+
+.modal-add-button {
+  background: #27ae60;
+}
+
+.modal-add-button:hover:not(:disabled) {
+  background: #2ecc71;
+}
+
+.modal-add-button:disabled {
+  background: #95a5a6;
+  cursor: not-allowed;
+}
+
+/* --- Utility/Feedback Classes --- */
+.loading-message {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 50px;
+  color: #555;
+}
+
+.error-message {
+  text-align: center;
+  color: #e74c3c;
+  font-weight: 500;
+  margin-top: 50px;
+}

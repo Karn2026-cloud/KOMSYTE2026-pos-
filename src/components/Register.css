@@ -1,0 +1,234 @@
+/* --- Register.css --- */
+
+/* * =========================================
+ * CSS VARIABLES
+ * ========================================= */
+:root {
+  --primary-color: #007bff;
+  --primary-hover: #0056b3;
+  --danger-color: #dc3545;
+  --danger-hover: #c82333;
+  --success-color: #28a745;
+  --notice-bg: #fff3cd;
+  --notice-border: #ffeeba;
+  --panel-bg: #ffffff;
+  --border-color: #dee2e6;
+  --text-dark: #343a40;
+  --text-light: #6c757d;
+  --shadow: 0 4px 8px rgba(0, 0, 0, 0.07);
+}
+
+/* * =========================================
+ * MAIN LAYOUT & CONTAINER
+ * ========================================= */
+.register-product-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.register-product-container h2 {
+  text-align: center;
+  color: var(--text-dark);
+  margin-bottom: 20px;
+}
+
+.form-section {
+  background-color: var(--panel-bg);
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+/* * =========================================
+ * FORM & INPUTS
+ * ========================================= */
+.form-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-section input[type="text"],
+.form-section input[type="number"] {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-section input[type="text"]:focus,
+.form-section input[type="number"]:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+.form-section button[type="submit"] {
+  padding: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.form-section button[type="submit"]:hover:not(:disabled) {
+  background-color: var(--primary-hover);
+}
+
+.form-section hr {
+  border: 0;
+  border-top: 1px solid var(--border-color);
+  margin: 25px 0;
+}
+
+.form-section h4 {
+  margin: 0 0 10px 0;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+/* * =========================================
+ * UPDATE MODE TOGGLE SWITCH
+ * ========================================= */
+.toggle-mode {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 15px;
+}
+.toggle-mode label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+.toggle-mode input[type="checkbox"] {
+  position: relative;
+  width: 40px;
+  height: 20px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #ccc;
+  outline: none;
+  border-radius: 20px;
+  transition: background-color 0.3s;
+  cursor: pointer;
+}
+.toggle-mode input[type="checkbox"]::before {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  background: white;
+  transition: 0.3s;
+}
+.toggle-mode input[type="checkbox"]:checked {
+  background: var(--primary-color);
+}
+.toggle-mode input[type="checkbox"]:checked::before {
+  transform: translateX(20px);
+}
+
+/* * =========================================
+ * TOOLS & UPLOAD SECTION
+ * ========================================= */
+.tools-section, .excel-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.tools-section button {
+  padding: 10px 15px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #fff;
+  background-color: var(--success-color);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.tools-section button.stop-scan {
+  background-color: var(--danger-color);
+}
+
+.tools-section button.stop-scan:hover:not(:disabled) {
+  background-color: var(--danger-hover);
+}
+
+.excel-upload label {
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.excel-upload input[type="file"] {
+  font-size: 0.95rem;
+}
+/* Style file input button */
+.excel-upload input[type="file"]::file-selector-button {
+  padding: 8px 12px;
+  margin-right: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.excel-upload input[type="file"]::file-selector-button:hover {
+  background-color: #e2e6ea;
+}
+
+
+/* * =========================================
+ * MESSAGES & NOTICES
+ * ========================================= */
+.message {
+  padding: 12px;
+  border-radius: 6px;
+  margin-top: 15px;
+  text-align: center;
+  font-weight: 500;
+  color: #fff;
+}
+.message.success {
+  background-color: var(--success-color);
+}
+.message.error {
+  background-color: var(--danger-color);
+}
+
+.feature-locked-notice {
+  background-color: var(--notice-bg);
+  border: 1px solid var(--notice-border);
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+.feature-locked-notice p {
+  margin: 0;
+  font-weight: 500;
+  color: #856404; /* Dark yellow text color */
+}
+
+/* * =========================================
+ * GENERAL DISABLED STATE
+ * ========================================= */
+button:disabled, input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

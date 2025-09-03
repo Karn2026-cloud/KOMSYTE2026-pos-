@@ -1,0 +1,83 @@
+/* src/RestaurantPOS.css */
+.restaurant-pos-container {
+  display: flex;
+  height: 90vh;
+  gap: 15px;
+  padding: 15px;
+  font-family: Arial, sans-serif;
+}
+
+.tables-panel, .menu-panel, .order-panel {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  background: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+}
+
+.tables-panel { flex: 1; }
+.menu-panel { flex: 2; }
+.order-panel { flex: 2; }
+
+h3 { text-align: center; margin-top: 0; color: #333; }
+
+/* Tables Panel */
+.table-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  gap: 10px;
+  overflow-y: auto;
+}
+.table-box {
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2em;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.table-box.available { background-color: #28a745; color: white; }
+.table-box.occupied { background-color: #dc3545; color: white; }
+.table-box.selected { box-shadow: 0 0 0 3px #007bff; }
+
+/* Menu Panel */
+.category-tabs { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+.category-tabs button { padding: 8px 12px; border: 1px solid #ddd; background: #fff; cursor: pointer; border-radius: 5px; }
+.category-tabs button.active { background: #007bff; color: white; border-color: #007bff; }
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+.menu-item-box {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  background: white;
+}
+.menu-item-box:hover { background: #e9ecef; }
+.menu-item-box span { font-size: 0.9em; color: #555; }
+
+/* Order Panel */
+.order-items-list { flex-grow: 1; overflow-y: auto; background: white; padding: 5px; border-radius: 5px; }
+.order-items-list table { width: 100%; border-collapse: collapse; }
+.order-items-list th, .order-items-list td { padding: 8px; text-align: left; border-bottom: 1px solid #eee; }
+.status-New { color: #007bff; font-weight: bold; }
+.status-KOT-Sent { color: #28a745; }
+.empty-order-text { padding: 20px; text-align: center; color: #777; }
+
+.order-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 10px; }
+.order-actions button { padding: 12px; font-size: 1em; border: none; color: white; border-radius: 5px; cursor: pointer; }
+.kot-btn { background-color: #ffc107; color: black; }
+.bill-btn { background-color: #17a2b8; }
+.settle-btn { background-color: #28a745; }
+.pos-message { text-align: center; margin-top: 10px; font-weight: bold; }

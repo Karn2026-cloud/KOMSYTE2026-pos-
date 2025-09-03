@@ -1,0 +1,107 @@
+/* --- Signup.css --- */
+
+/* * =========================================
+ * MAIN CONTAINER
+ * ========================================= */
+.signup-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 30px; /* Increased padding for better spacing */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.signup-title {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 1.8rem;
+  color: #333;
+}
+
+/* * =========================================
+ * FORM ELEMENTS
+ * ========================================= */
+.input-group {
+  margin-bottom: 18px;
+}
+
+/* Accessibility class to hide labels visually but keep them for screen readers */
+.input-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.signup-input {
+  width: 100%;
+  padding: 12px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.signup-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.signup-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #28a745;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.signup-button:hover:not(:disabled) {
+  background-color: #218838;
+}
+
+/* Style for the button when it's in a loading/disabled state */
+.signup-button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+/* * =========================================
+ * FEEDBACK & FOOTER
+ * ========================================= */
+.error-text {
+  color: #d93025; /* A more standard error red */
+  margin-top: 15px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.footer-text {
+  margin-top: 20px;
+  text-align: center;
+  color: #555;
+}
+
+.signup-link {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.signup-link:hover {
+  text-decoration: underline;
+}
