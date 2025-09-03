@@ -1,25 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import "./SignUp.css"; // Import the stylesheet
+import API from '../api'; // ✅ Switched to central API service
+import "./SignUp.css";
 
-// --- API Abstraction ---
-const signupUser = async (userData) => {
-  const response = await fetch("http://localhost:5000/api/signup", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(userData),
-  });
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.error || "An unknown error occurred.");
-  }
-
-  return data;
-};
-
-// --- Component ---
 function Signup({ onAuthChange }) {
   const [formData, setFormData] = useState({
     shopName: "",
@@ -41,12 +24,19 @@ function Signup({ onAuthChange }) {
     setLoading(true);
 
     try {
-      const { token } = await signupUser(formData);
+      // ✅ Using relative path through the API service
+      const response = await API.post("/api/signup", formData);
+      const { token } = response.data;
       localStorage.setItem("token", token);
-      if (onAuthChange) onAuthChange();
+      
+      if (typeof onAuthChange === 'function') {
+        onAuthChange();
+      }
+      
       navigate("/");
+
     } catch (err) {
-      setError(err.message || "Network error. Please check your connection.");
+      setError(err.response?.data?.error || "An unexpected error occurred. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -54,15 +44,15 @@ function Signup({ onAuthChange }) {
 
   return (
     <div className="signup-container">
-      <h2 className="signup-title">Create Account</h2>
-      <form onSubmit={handleSignup}>
+      <h2 className="signup-title">Create Your Shop Account</h2>
+      <form onSubmit={handleSignup} className="signup-form">
         <div className="input-group">
           <label htmlFor="shopName" className="input-label">Shop Name</label>
           <input
             id="shopName"
             name="shopName"
             type="text"
-            placeholder="Shop Name"
+            placeholder="Your Shop's Name"
             value={formData.shopName}
             onChange={handleChange}
             required
