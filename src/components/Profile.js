@@ -1,233 +1,10 @@
+// src/components/Profile.js (Corrected Version)
+
 import React, { useState, useEffect } from "react";
 import { FaTrash, FaChartBar, FaPlus, FaEdit, FaSave, FaTimes } from 'react-icons/fa';
 import API from "../api";
-import styled, { keyframes } from 'styled-components';
+import './Profile.css';
 
-// ==========================================================================
-//   STYLED COMPONENTS (CSS is now part of your component file)
-// ==========================================================================
-
-const fadeIn = keyframes`
-  from { opacity: 0; }
-  to { opacity: 1; }
-`;
-
-const slideUp = keyframes`
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-`;
-
-const ProfileContainer = styled.div`
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  padding: 15px;
-  animation: ${fadeIn} 0.5s ease-in-out;
-  @media (min-width: 768px) {
-    padding: 25px;
-  }
-`;
-
-const InfoGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-  margin-bottom: 20px;
-  @media (min-width: 768px) {
-    grid-template-columns: 1fr 1fr;
-  }
-`;
-
-const Card = styled.div`
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 6px 25px rgba(44, 62, 80, 0.08);
-  display: flex;
-  flex-direction: column;
-  @media (min-width: 768px) {
-    padding: 25px;
-  }
-`;
-
-const ProfileHeader = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #e9ecef;
-  padding-bottom: 15px;
-`;
-
-const CardTitle = styled.h3`
-  margin: 0;
-  color: #2c3e50;
-  font-size: 1.3rem;
-  font-weight: 600;
-`;
-
-const Item = styled.p`
-  font-size: 1rem;
-  color: #555;
-  margin: 12px 0;
-  line-height: 1.5;
-  strong {
-    color: #2c3e50;
-  }
-`;
-
-const Button = styled.button`
-  padding: 12px 20px;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  text-align: center;
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  }
-`;
-
-const UpgradeButton = styled(Button)`
-  background: #3498db;
-  color: white;
-  margin-top: auto;
-  &:hover {
-    background: #2980b9;
-  }
-`;
-
-const AddNewButton = styled(Button)`
-  background: #2ecc71;
-  color: white;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  &:hover {
-    background: #27ae60;
-  }
-`;
-
-const ActionButton = styled.button`
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  font-size: 1.1rem;
-  margin: 0 5px;
-  padding: 5px;
-  transition: transform 0.2s ease, color 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  vertical-align: middle;
-  &:hover { transform: scale(1.2); }
-  &:disabled {
-    color: #bdc3c7;
-    cursor: not-allowed;
-    transform: none;
-  }
-  span {
-    margin-left: 6px;
-    font-size: 0.9rem;
-    font-weight: 600;
-  }
-`;
-
-const TableContainer = styled.div`
-  overflow-x: auto;
-`;
-
-const WorkerTable = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-  th, td {
-    padding: 12px 15px;
-    text-align: left;
-    white-space: nowrap;
-    border-bottom: 1px solid #e9ecef;
-  }
-  th {
-    background: #f8f9fa;
-    font-weight: 600;
-    color: #495057;
-  }
-  tbody tr:last-child td {
-    border-bottom: none;
-  }
-`;
-
-const ModalOverlay = styled.div`
-  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  z-index: 1000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 15px;
-  animation: ${fadeIn} 0.3s ease;
-`;
-
-const ModalContent = styled.div`
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 420px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  animation: ${slideUp} 0.4s ease;
-`;
-
-const ModalTitle = styled.h3`
-  margin-top: 0;
-  color: #2c3e50;
-  font-size: 1.5rem;
-  text-align: center;
-  margin-bottom: 25px;
-`;
-
-const ModalInput = styled.input`
-  width: 100%;
-  padding: 12px;
-  box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  margin-bottom: 15px;
-  font-size: 1rem;
-  transition: all 0.2s ease;
-  &:focus {
-    outline: none;
-    border-color: #3498db;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-  }
-`;
-
-const ModalActions = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
-`;
-
-const ModalButton = styled(Button)`
-  color: white;
-  background: ${props => props.primary ? '#27ae60' : '#95a5a6'};
-  &:hover:not(:disabled) {
-    background: ${props => props.primary ? '#2ecc71' : '#7f8c8d'};
-  }
-  &:disabled {
-    background: #bdc3c7;
-    cursor: not-allowed;
-  }
-`;
-
-
-// ==========================================================================
-//   MODAL COMPONENT
-// ==========================================================================
 const AddWorkerModal = ({ isOpen, onClose, onAddWorker }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -249,27 +26,23 @@ const AddWorkerModal = ({ isOpen, onClose, onAddWorker }) => {
 
     if (!isOpen) return null;
     return (
-        <ModalOverlay>
-            <ModalContent>
-                <ModalTitle>Register New Worker</ModalTitle>
+        <div className="modal-overlay">
+            <div className="modal-content">
+                <h3 className="modal-title">Register New Worker</h3>
                 <form onSubmit={handleSubmit}>
-                    <ModalInput type="text" placeholder="Worker Full Name" value={name} onChange={e => setName(e.target.value)} required />
-                    <ModalInput type="email" placeholder="Worker Email (for login)" value={email} onChange={e => setEmail(e.target.value)} required />
-                    <ModalInput type="password" placeholder="Create a Temporary Password" value={password} onChange={e => setPassword(e.target.value)} required />
-                    <ModalActions>
-                        <ModalButton type="button" onClick={onClose}>Cancel</ModalButton>
-                        <ModalButton type="submit" primary disabled={isAdding}>{isAdding ? "Adding..." : "Add Worker"}</ModalButton>
-                    </ModalActions>
+                    <input className="modal-input" type="text" placeholder="Worker Full Name" value={name} onChange={e => setName(e.target.value)} required />
+                    <input className="modal-input" type="email" placeholder="Worker Email (for login)" value={email} onChange={e => setEmail(e.target.value)} required />
+                    <input className="modal-input" type="password" placeholder="Create a Temporary Password" value={password} onChange={e => setPassword(e.target.value)} required />
+                    <div className="modal-actions">
+                        <button type="button" className="modal-close-button" onClick={onClose}>Cancel</button>
+                        <button type="submit" className="modal-add-button" disabled={isAdding}>{isAdding ? "Adding..." : "Add Worker"}</button>
+                    </div>
                 </form>
-            </ModalContent>
-        </ModalOverlay>
+            </div>
+        </div>
     );
 };
 
-
-// ==========================================================================
-//   MAIN PROFILE COMPONENT
-// ==========================================================================
 export default function Profile({ user, onUpdateUser }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -285,16 +58,21 @@ export default function Profile({ user, onUpdateUser }) {
         }
     }, [user]);
 
-    const handleAddWorker = async (workerData) => {
-        try {
-            await API.post("/api/workers/add", workerData);
-            await onUpdateUser();
-        } catch (err) {
-            alert(err.response?.data?.error || "Failed to add worker.");
-            throw err;
-        }
-    };
+   const handleAddWorker = async (workerData) => {
+    try {
+        // The API call is now a complete statement.
+        // The workerData is passed as the second argument.
+        await API.post("/api/workers/add", workerData);
 
+        // These lines will only run AFTER the API call above is successful.
+        showNotification("Worker added successfully!");
+        onUpdateUser(); // Refresh profile data to show the new worker
+
+    } catch (error) {
+        // This block will run if the API call fails for any reason.
+        showNotification(error.response?.data?.error || "Failed to add worker.", 'error');
+    }
+};
     const handleRemoveWorker = async (workerId, workerName) => {
         if (window.confirm(`Are you sure you want to remove the worker "${workerName}"?`)) {
             try {
@@ -328,81 +106,81 @@ export default function Profile({ user, onUpdateUser }) {
     };
 
     if (!user) {
-        return <p>Loading Profile...</p>;
+        return <p className="loading-message">Loading Profile...</p>;
     }
 
     const { shop, subscription, workers } = user;
 
     return (
-        <ProfileContainer>
-            <InfoGrid>
-                <Card>
-                    <ProfileHeader>
-                        <CardTitle>Shop Information</CardTitle>
+        <div className="profile-container">
+            <div className="info-grid">
+                <div className="card">
+                    <div className="profile-header">
+                        <h3 className="card-title">Shop Information</h3>
                         {!isEditing ? (
-                            <ActionButton onClick={() => setIsEditing(true)} style={{ color: '#3498db' }}> <FaEdit /> <span>Edit</span> </ActionButton>
+                            <button className="action-button edit-button" onClick={() => setIsEditing(true)}> <FaEdit /> Edit </button>
                         ) : (
-                            <div style={{ display: 'flex', gap: '10px' }}>
-                                <ActionButton onClick={() => setIsEditing(false)} disabled={isSaving} style={{ color: '#95a5a6' }}> <FaTimes /> <span>Cancel</span> </ActionButton>
-                                <ActionButton onClick={handleSaveSubmit} disabled={isSaving} style={{ color: '#27ae60' }}> <FaSave /> <span>{isSaving ? 'Saving...' : 'Save'}</span> </ActionButton>
+                            <div className="edit-actions">
+                                <button className="action-button cancel-button" onClick={() => setIsEditing(false)} disabled={isSaving}> <FaTimes /> Cancel </button>
+                                <button className="action-button save-button" onClick={handleSaveSubmit} disabled={isSaving}> <FaSave /> {isSaving ? 'Saving...' : 'Save'} </button>
                             </div>
                         )}
-                    </ProfileHeader>
+                    </div>
                     {!isEditing ? (
                         <>
-                            <Item><strong>Shop Name:</strong> {shop?.shopName || "-"}</Item>
-                            <Item><strong>Email:</strong> {shop?.email || "-"}</Item>
+                            <p className="item"><strong>Shop Name:</strong> {shop?.shopName || "-"}</p>
+                            <p className="item"><strong>Email:</strong> {shop?.email || "-"}</p>
                         </>
                     ) : (
-                        <div>
-                            <label>Shop Name:</label>
-                            <ModalInput type="text" name="shopName" value={formData.shopName} onChange={handleInputChange} />
-                            <label>Login Email:</label>
-                            <ModalInput type="email" name="email" value={formData.email} onChange={handleInputChange} />
+                        <div className="edit-form">
+                            <label className="form-label">Shop Name:</label>
+                            <input className="modal-input" type="text" name="shopName" value={formData.shopName} onChange={handleInputChange}/>
+                            <label className="form-label">Login Email:</label>
+                            <input className="modal-input" type="email" name="email" value={formData.email} onChange={handleInputChange} />
                         </div>
                     )}
-                </Card>
-                <Card>
-                    <CardTitle>Subscription</CardTitle>
-                    <Item><strong>Plan:</strong> {subscription?.plan || "Free"}</Item>
-                    <Item><strong>Status:</strong> {subscription?.status || "Inactive"}</Item>
-                    <UpgradeButton onClick={() => alert('Upgrade functionality coming soon!')}> Manage Subscription </UpgradeButton>
-                </Card>
-            </InfoGrid>
-            <Card>
-                <ProfileHeader>
-                    <CardTitle>Manage Workers</CardTitle>
-                    <AddNewButton onClick={() => setIsModalOpen(true)}>
-                        <FaPlus /> Register Worker
-                    </AddNewButton>
-                </ProfileHeader>
-                <TableContainer>
-                    <WorkerTable>
+                </div>
+                <div className="card">
+                    <h3 className="card-title">Subscription</h3>
+                    <p className="item"><strong>Plan:</strong> {subscription?.plan || "Free"}</p>
+                    <p className="item"><strong>Status:</strong> {subscription?.status || "Inactive"}</p>
+                    <button className="upgrade-button" onClick={() => alert('Upgrade functionality coming soon!')}> Manage Subscription </button>
+                </div>
+            </div>
+            <div className="card">
+                <div className="profile-header">
+                    <h3 className="card-title">Manage Workers</h3>
+                    <button className="add-new-button" onClick={() => setIsModalOpen(true)}>
+                        <FaPlus style={{ marginRight: '8px' }} /> Register Worker
+                    </button>
+                </div>
+                <div className="table-container">
+                    <table className="worker-table">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Login Email</th>
-                                <th>Actions</th>
+                                <th className="th">Name</th>
+                                <th className="th">Login Email</th>
+                                <th className="th">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {workers?.length > 0 ? workers.map(w => (
                                 <tr key={w._id}>
-                                    <td>{w.name}</td>
-                                    <td>{w.email}</td>
-                                    <td>
-                                        <ActionButton onClick={() => alert('Performance view coming soon!')} title="View Performance" style={{ color: '#3498db' }}><FaChartBar /></ActionButton>
-                                        <ActionButton onClick={() => handleRemoveWorker(w._id, w.name)} title="Remove Worker" style={{ color: '#e74c3c' }}><FaTrash /></ActionButton>
+                                    <td className="td">{w.name}</td>
+                                    <td className="td">{w.email}</td>
+                                    <td className="td">
+                                        <button className="action-button performance-button" onClick={() => alert('Performance view coming soon!')} title="View Performance"><FaChartBar /></button>
+                                        <button className="action-button remove-button" onClick={() => handleRemoveWorker(w._id, w.name)} title="Remove Worker"><FaTrash /></button>
                                     </td>
                                 </tr>
                             )) : (
-                                <tr><td colSpan="3" style={{ textAlign: 'center', color: '#777', padding: '30px' }}>No workers registered yet.</td></tr>
+                                <tr><td colSpan="3" className="td no-workers-message">No workers registered yet.</td></tr>
                             )}
                         </tbody>
-                    </WorkerTable>
-                </TableContainer>
-            </Card>
+                    </table>
+                </div>
+            </div>
             <AddWorkerModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onAddWorker={handleAddWorker} />
-        </ProfileContainer>
+        </div>
     );
 }
