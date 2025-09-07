@@ -1,9 +1,36 @@
-// src/components/Profile.js (Corrected Version)
-
 import React, { useState, useEffect } from "react";
 import { FaTrash, FaChartBar, FaPlus, FaEdit, FaSave, FaTimes } from 'react-icons/fa';
 import API from "../api";
-import './Profile.css';
+import './Profile.css'; // Make sure you have created and styled this file
+
+// A simple, reusable notification component. You can style this further in Profile.css
+const Notification = ({ message, type, onClear }) => {
+    if (!message) return null;
+
+    const notificationStyle = {
+        position: 'fixed',
+        top: '20px',
+        right: '20px',
+        padding: '15px 20px',
+        borderRadius: '8px',
+        color: 'white',
+        backgroundColor: type === 'error' ? '#e74c3c' : '#2ecc71',
+        boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
+        zIndex: 1001,
+        display: 'flex',
+        alignItems: 'center',
+        gap: '15px'
+    };
+
+    return (
+        <div style={notificationStyle}>
+            {message}
+            <button onClick={onClear} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', fontSize: '1.5rem', padding: '0', lineHeight: '1' }}>
+                &times;
+            </button>
+        </div>
+    );
+};
 
 const AddWorkerModal = ({ isOpen, onClose, onAddWorker }) => {
     const [name, setName] = useState('');
@@ -13,13 +40,18 @@ const AddWorkerModal = ({ isOpen, onClose, onAddWorker }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!name || !email || !password) return alert("Please fill all fields.");
+        if (!name || !email || !password) {
+            // This can be improved to use the notification system from the parent
+            return alert("Please fill all fields.");
+        }
         setIsAdding(true);
         try {
             await onAddWorker({ name, email, password });
             setName(''); setEmail(''); setPassword('');
             onClose();
-        } catch (err) { /* Error is handled in parent */ } finally {
+        } catch (err) {
+            // Error is handled in the parent component's onAddWorker function
+        } finally {
             setIsAdding(false);
         }
     };
@@ -49,6 +81,16 @@ export default function Profile({ user, onUpdateUser }) {
     const [formData, setFormData] = useState({ shopName: '', email: '' });
     const [isSaving, setIsSaving] = useState(false);
 
+    // ✅ 1. ADD NOTIFICATION STATE
+    const [notification, setNotification] = useState({ message: '', type: '' });
+
+    // ✅ 2. DEFINE THE NOTIFICATION FUNCTION
+    const showNotification = (message, type = 'success') => {
+        setNotification({ message, type });
+        // Auto-hide the notification after 5 seconds
+        setTimeout(() => setNotification({ message: '', type: '' }), 5000);
+    };
+
     useEffect(() => {
         if (user?.shop) {
             setFormData({
@@ -58,29 +100,25 @@ export default function Profile({ user, onUpdateUser }) {
         }
     }, [user]);
 
-const handleAddWorker = async (workerData) => {
-    try {
-        // The API call is now a complete statement.
-        // The workerData is passed as the second argument.
-        await API.post("/api/workers/add", workerData);
-
-        // These lines will only run AFTER the API call above is successful.
-        showNotification("Worker added successfully!");
-        onUpdateUser(); // Refresh profile data to show the new worker
-
-    } catch (error) {
-        // This block will run if the API call fails for any reason.
-        showNotification(error.response?.data?.error || "Failed to add worker.", 'error');
-    }
-};
+    const handleAddWorker = async (workerData) => {
+        try {
+            await API.post("/api/workers/add", workerData);
+            await onUpdateUser();
+            showNotification("Worker added successfully!"); // This will now work
+        } catch (err) {
+            showNotification(err.response?.data?.error || "Failed to add worker.", 'error'); // This will now work
+            throw err; // Re-throw error so the modal knows the submission failed
+        }
+    };
 
     const handleRemoveWorker = async (workerId, workerName) => {
         if (window.confirm(`Are you sure you want to remove the worker "${workerName}"?`)) {
             try {
                 await API.delete(`/api/workers/${workerId}`);
                 await onUpdateUser();
+                showNotification("Worker removed successfully!"); // Replaced alert
             } catch (err) {
-                alert(err.response?.data?.error || "Failed to remove worker.");
+                showNotification(err.response?.data?.error || "Failed to remove worker.", 'error'); // Replaced alert
             }
         }
     };
@@ -92,15 +130,16 @@ const handleAddWorker = async (workerData) => {
 
     const handleSaveSubmit = async () => {
         if (!formData.shopName || !formData.email) {
-            return alert("Shop Name and Email cannot be empty.");
+            return showNotification("Shop Name and Email cannot be empty.", 'error'); // Replaced alert
         }
         setIsSaving(true);
         try {
             await API.put('/api/profile/shop', formData);
             await onUpdateUser();
             setIsEditing(false);
+            showNotification("Shop information updated successfully!");
         } catch (err) {
-            alert(err.response?.data?.error || "Failed to update profile.");
+            showNotification(err.response?.data?.error || "Failed to update profile.", 'error'); // Replaced alert
         } finally {
             setIsSaving(false);
         }
@@ -114,6 +153,13 @@ const handleAddWorker = async (workerData) => {
 
     return (
         <div className="profile-container">
+            {/* ✅ 3. RENDER THE NOTIFICATION COMPONENT */}
+            <Notification
+                message={notification.message}
+                type={notification.type}
+                onClear={() => setNotification({ message: '', type: '' })}
+            />
+
             <div className="info-grid">
                 <div className="card">
                     <div className="profile-header">
@@ -135,7 +181,7 @@ const handleAddWorker = async (workerData) => {
                     ) : (
                         <div className="edit-form">
                             <label className="form-label">Shop Name:</label>
-                            <input className="modal-input" type="text" name="shopName" value={formData.shopName} onChange={handleInputChange}/>
+                            <input className="modal-input" type="text" name="shopName" value={formData.shopName} onChange={handleInputChange} />
                             <label className="form-label">Login Email:</label>
                             <input className="modal-input" type="email" name="email" value={formData.email} onChange={handleInputChange} />
                         </div>
@@ -145,7 +191,7 @@ const handleAddWorker = async (workerData) => {
                     <h3 className="card-title">Subscription</h3>
                     <p className="item"><strong>Plan:</strong> {subscription?.plan || "Free"}</p>
                     <p className="item"><strong>Status:</strong> {subscription?.status || "Inactive"}</p>
-                    <button className="upgrade-button" onClick={() => alert('Upgrade functionality coming soon!')}> Manage Subscription </button>
+                    <button className="upgrade-button" onClick={() => showNotification('Upgrade functionality coming soon!', 'info')}> Manage Subscription </button>
                 </div>
             </div>
             <div className="card">
@@ -170,7 +216,7 @@ const handleAddWorker = async (workerData) => {
                                     <td className="td">{w.name}</td>
                                     <td className="td">{w.email}</td>
                                     <td className="td">
-                                        <button className="action-button performance-button" onClick={() => alert('Performance view coming soon!')} title="View Performance"><FaChartBar /></button>
+                                        <button className="action-button performance-button" onClick={() => showNotification('Performance view coming soon!', 'info')} title="View Performance"><FaChartBar /></button>
                                         <button className="action-button remove-button" onClick={() => handleRemoveWorker(w._id, w.name)} title="Remove Worker"><FaTrash /></button>
                                     </td>
                                 </tr>
