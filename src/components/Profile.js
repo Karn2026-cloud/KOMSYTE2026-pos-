@@ -67,15 +67,20 @@ export default function Profile({ user, onUpdateUser }) {
     };
 
     const handleAddWorker = async (workerData) => {
-        try {
-           // AFTER (Correct)
-await API.post("/api/workers/add",
-            showNotification("Worker added successfully!");
-            onUpdateUser(); // Refresh profile data to show the new worker
-        } catch (error) {
-            showNotification(error.response?.data?.error || "Failed to add worker.", 'error');
-        }
-    };
+    try {
+        // The API call is now a complete statement.
+        // The workerData is passed as the second argument.
+        await API.post("/api/workers/add", workerData);
+
+        // These lines will only run AFTER the API call above is successful.
+        showNotification("Worker added successfully!");
+        onUpdateUser(); // Refresh profile data to show the new worker
+
+    } catch (error) {
+        // This block will run if the API call fails for any reason.
+        showNotification(error.response?.data?.error || "Failed to add worker.", 'error');
+    }
+};
 
     const handleRemoveWorker = async (workerId, workerName) => {
         // ✅ Replaced window.confirm with a more modern approach
@@ -142,5 +147,6 @@ await API.post("/api/workers/add",
         </div>
     );
 }
+
 
 
