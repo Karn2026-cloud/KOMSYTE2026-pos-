@@ -1,6 +1,7 @@
 // src/components/ContactPage.js
 
 import React from 'react';
+import API from '../api';
 import './InfoPages.css'; // We will create this CSS file in the next step
 
 export default function ContactPage() {
@@ -61,4 +62,5 @@ export default function ContactPage() {
     );
 
 }
+
 
