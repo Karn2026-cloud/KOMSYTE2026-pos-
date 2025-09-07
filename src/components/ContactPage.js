@@ -12,7 +12,7 @@ export default function ContactPage() {
         const data = Object.fromEntries(formData.entries());
 
         try {
-            const response = await fetch('http://localhost:5000/api/contact', { // Make sure this URL matches your backend
+           const response = await API.post('/api/contact',{ // Make sure this URL matches your backend
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -66,4 +66,5 @@ export default function ContactPage() {
             </form>
         </div>
     );
+
 }
