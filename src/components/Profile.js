@@ -58,7 +58,7 @@ export default function Profile({ user, onUpdateUser }) {
         }
     }, [user]);
 
-   const handleAddWorker = async (workerData) => {
+const handleAddWorker = async (workerData) => {
     try {
         // The API call is now a complete statement.
         // The workerData is passed as the second argument.
@@ -73,6 +73,7 @@ export default function Profile({ user, onUpdateUser }) {
         showNotification(error.response?.data?.error || "Failed to add worker.", 'error');
     }
 };
+
     const handleRemoveWorker = async (workerId, workerName) => {
         if (window.confirm(`Are you sure you want to remove the worker "${workerName}"?`)) {
             try {
