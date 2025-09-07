@@ -5,35 +5,28 @@ import './InfoPages.css'; // We will create this CSS file in the next step
 
 export default function ContactPage() {
     // 👇 REPLACE THIS ENTIRE FUNCTION
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        const form = event.target;
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
+   const handleSubmit = async (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
 
-        try {
-           const response = await API.post('/api/contact',{ // Make sure this URL matches your backend
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            });
+    try {
+        // 1. Pass the 'data' object directly. Axios handles the rest.
+        const response = await API.post('/api/contact', data);
 
-            const result = await response.json();
+        // 2. The successful response data is in 'response.data'.
+        alert(response.data.message);
+        form.reset();
 
-            if (!response.ok) {
-                throw new Error(result.error || 'Something went wrong');
-            }
-
-            alert(result.message); // Show success message
-            form.reset(); // Clear the form after successful submission
-
-        } catch (error) {
-            console.error('Form submission error:', error);
-            alert(`Error: ${error.message}`); // Show error message
-        }
-    };
+    } catch (error) {
+        // 3. Axios automatically throws an error for bad responses, 
+        //    so the 'catch' block will handle all failures.
+        const errorMessage = error.response?.data?.error || 'Failed to send message. Please try again.';
+        console.error('Form submission error:', error);
+        alert(`Error: ${errorMessage}`);
+    }
+};
 
     return (
         <div className="info-page-container">
@@ -68,3 +61,4 @@ export default function ContactPage() {
     );
 
 }
+
