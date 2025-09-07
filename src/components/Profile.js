@@ -68,7 +68,8 @@ export default function Profile({ user, onUpdateUser }) {
 
     const handleAddWorker = async (workerData) => {
         try {
-            await API.post("/api/workers", workerData);
+           // AFTER (Correct)
+await API.post("/api/workers/add", workerData);
             showNotification("Worker added successfully!");
             onUpdateUser(); // Refresh profile data to show the new worker
         } catch (error) {
@@ -141,3 +142,4 @@ export default function Profile({ user, onUpdateUser }) {
         </div>
     );
 }
+
