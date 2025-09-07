@@ -55,25 +55,26 @@ export default function Subscription({ user, onSubscriptionUpdate }) {
       }
 
       // Handle paid plans with Razorpay
-      const { key_id, order_id } = response.data;
-      const options = {
-        key: key_id,
-        order_id: order_id,
-        name: "KOMSYTE Subscription",
-        description: `Payment for ${plans.find(p => p.id === selectedPlan)?.name} Plan`,
-        handler: async function (paymentResponse) {
-          try {
-            // ✅ Use central API service to confirm payment
-            await API.post('/api/subscribe/confirm', {
-              razorpay_order_id: paymentResponse.razorpay_order_id,
-              razorpay_payment_id: paymentResponse.razorpay_payment_id,
-              razorpay_signature: paymentResponse.razorpay_signature,
-            });
-            setMessage({ text: `Payment successful! Your subscription is now active.`, type: 'success' });
-            if (onSubscriptionUpdate) onSubscriptionUpdate(); // ✅ Notify parent component
-          } catch (err) {
-            setMessage({ text: `Payment verification failed: ${err.response?.data?.error || 'Unknown error'}`, type: 'error' });
-          }
+     // ✅ CORRECTED: Use subscription_id instead of order_id
+        const { key_id, subscription_id } = response.data;
+        const options = {
+            key: key_id,
+            subscription_id: subscription_id, // Use the correct ID here
+            name: "KOMSYTE Subscription",
+            description: `Payment for ${plans.find(p => p.id === selectedPlan)?.name} Plan`,
+            handler: async function (paymentResponse) {
+                try {
+                    // This part now needs to send the subscription_id for verification
+                    await API.post('/api/subscribe/confirm', {
+                        razorpay_subscription_id: subscription_id, // Send subscription_id
+                        razorpay_payment_id: paymentResponse.razorpay_payment_id,
+                        razorpay_signature: paymentResponse.razorpay_signature,
+                    });
+                    setMessage({ text: `Payment successful! Your subscription is now active.`, type: 'success' });
+                    if (onSubscriptionUpdate) onSubscriptionUpdate();
+                } catch (err) {
+                    setMessage({ text: `Payment verification failed: ${err.response?.data?.error || 'Unknown error'}`, type: 'error' });
+                }
         },
         modal: {
           ondismiss: () => setMessage({ text: 'Payment was cancelled.', type: 'info' }),
@@ -137,3 +138,4 @@ export default function Subscription({ user, onSubscriptionUpdate }) {
   );
 
 }
+
