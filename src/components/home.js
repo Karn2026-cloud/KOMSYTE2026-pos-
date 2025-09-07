@@ -1,9 +1,13 @@
-// src/components/home.js (Corrected Version)
+// src/components/home.js (Updated Version)
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 import API from '../api';
 import './Home.css';
+
+// --- (1) IMPORT YOUR NEW PAGES ---
+import AboutPage from './AboutPage'; 
+import ContactPage from './ContactPage';
 
 import Profile from './Profile';
 import Billing from './Billing';
@@ -15,6 +19,7 @@ import Subscription from './subscription';
 import komsyteLogo from '../assets/komsyte-logo.jpg';
 import { FaBars } from 'react-icons/fa';
 
+// --- (2) ADD NEW ITEMS TO THE MENU OBJECT ---
 const MENU_ITEMS = {
     profile: 'Profile & Workers',
     billing: 'Billing',
@@ -22,6 +27,8 @@ const MENU_ITEMS = {
     register: 'Register Product',
     reports: 'Reports',
     subscription: 'Subscription',
+    about: 'About & Help', // New Page
+    contact: 'Contact Us',   // New Page
 };
 
 export default function Home({ onLogout }) {
@@ -88,6 +95,11 @@ export default function Home({ onLogout }) {
                         <Route path="register" element={<RegisterProduct user={profileData} />} />
                         <Route path="reports" element={<Reports user={profileData} />} />
                         <Route path="subscription" element={<Subscription user={profileData} onSubscriptionUpdate={fetchProfileData} />} />
+                        
+                        {/* --- (3) ADD ROUTES FOR THE NEW PAGES --- */}
+                        <Route path="about" element={<AboutPage />} />
+                        <Route path="contact" element={<ContactPage />} />
+
                         <Route index element={<Profile user={profileData} onUpdateUser={fetchProfileData} />} />
                     </Routes>
                 </main>
