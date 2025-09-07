@@ -45,7 +45,7 @@ export default function Subscription({ user, onSubscriptionUpdate }) {
 
     try {
       // ✅ Use central API service to create order
-      const response = await API.post('/api/subscribe', { plan: selectedPlan });
+      const response = await API.post('/api/create-subscription', { plan: selectedPlan });
 
       // Handle free plan activation
       if (selectedPlan === 'free') {
@@ -135,4 +135,5 @@ export default function Subscription({ user, onSubscriptionUpdate }) {
       {message.text && <p className={`message ${message.type}`}>{message.text}</p>}
     </div>
   );
+
 }
