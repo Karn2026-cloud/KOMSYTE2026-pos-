@@ -13,6 +13,7 @@ import Profile from './Profile';
 import Billing from './Billing';
 import StockList from './stock';
 import RegisterProduct from './register';
+import Reports from './report';
 import Subscription from './subscription';
 
 import komsyteLogo from '../assets/komsyte-logo.jpg';
@@ -92,6 +93,7 @@ export default function Home({ onLogout }) {
                         <Route path="billing" element={<Billing user={profileData} />} />
                         <Route path="stock" element={<StockList user={profileData} />} />
                         <Route path="register" element={<RegisterProduct user={profileData} />} />
+                        <Route path="reports" element={<Reports user={profileData} />} />
                         <Route path="subscription" element={<Subscription user={profileData} onSubscriptionUpdate={fetchProfileData} />} />
                         
                         {/* --- (3) ADD ROUTES FOR THE NEW PAGES --- */}
@@ -105,4 +107,3 @@ export default function Home({ onLogout }) {
         </div>
     );
 }
-
